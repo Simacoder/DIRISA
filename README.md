@@ -37,7 +37,7 @@ This project is a single-page website built with HTML and CSS that presents stat
     └── ...
 ```
 
-> Adjust the structure above to match your repository.
+> For the love of Statistics and Mathematics to be better in Machine Learning.
 
 ## Getting Started
 
@@ -113,5 +113,6 @@ Works in all modern browsers, including:
 This project is available under the MIT License.
 
 ## Author
+- Simanga Mchunu
 
 Created as a modern educational website for learning statistics, data science, and machine learning fundamentals.
