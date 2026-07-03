@@ -233,8 +233,8 @@ footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem
     <ul class="nav-links">
       <li><a href="#topics">Topics</a></li>
       <li><a href="#ppdac">PPDAC</a></li>
-      <li><a href="#probability">Probability</a></li>
-      <li><a href="#inferential">Inferential</a></li>
+      <li><a href="#probability" onclick="activateTopic('probability')">Probability</a></li>
+      <li><a href="#inferential" onclick="activateTopic('inferential')">Inferential</a></li>
       <li><a href="#challenge">Challenge</a></li>
       <li><a href="#lab">Lab</a></li>
       <li><a href="#about">About</a></li>
@@ -403,7 +403,8 @@ footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem
   </div>
 
   <!-- PROBABILITY -->
-  <div id="panel-probability" class="topic-panel" id="probability">
+  <div id="probability" style="position:relative;top:-80px;visibility:hidden"></div>
+  <div id="panel-probability" class="topic-panel">
     <div class="content-grid">
       <div class="card teal">
         <div class="card-label">Foundation</div>
@@ -466,7 +467,8 @@ footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem
   </div>
 
   <!-- INFERENTIAL -->
-  <div id="panel-inferential" class="topic-panel" id="inferential">
+  <div id="inferential" style="position:relative;top:-80px;visibility:hidden"></div>
+  <div id="panel-inferential" class="topic-panel">
     <div class="content-grid">
       <div class="card teal">
         <div class="card-label">Core concept</div>
@@ -750,7 +752,7 @@ footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem
     <div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--teal) 0%,var(--steel) 100%);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:28px;font-weight:600;color:var(--navy);margin-bottom:1.5rem">SM</div>
     <p class="section-eyebrow">The builder</p>
     <h2 class="section-title" style="font-size:clamp(20px,2.5vw,28px)">Simanga Mchunu</h2>
-    <p style="font-size:14px;color:var(--text-dim);line-height:1.7;margin-bottom:1.5rem">BSc Applied Mathematics &amp; Computer Science · UNISA<br>ML Engineer · Mentor · Researcher</p>
+    <p style="font-size:14px;color:var(--text-dim);line-height:1.7;margin-bottom:1.5rem">BSc Applied Mathematics &amp; Computer Science · UNISA<br>ML Engineer · Mentor · Researcher </p>
     <a href="https://www.linkedin.com/in/simanga-mchunu-7570078a/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:rgba(10,102,194,0.12);border:1px solid rgba(10,102,194,0.35);border-radius:var(--radius);font-size:13px;font-weight:500;color:#5B9BD5;transition:all 0.15s;text-decoration:none" onmouseover="this.style.background='rgba(10,102,194,0.22)'" onmouseout="this.style.background='rgba(10,102,194,0.12)'">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       Follow on LinkedIn
@@ -808,8 +810,8 @@ footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem
         <div style="display:flex;flex-direction:column;gap:.4rem">
           <a href="#topics" style="font-size:13px;color:var(--text-dim)">Topics</a>
           <a href="#ppdac" style="font-size:13px;color:var(--text-dim)">PPDAC Cycle</a>
-          <a href="#probability" style="font-size:13px;color:var(--text-dim)">Probability</a>
-          <a href="#inferential" style="font-size:13px;color:var(--text-dim)">Inferential</a>
+          <a href="#probability" onclick="activateTopic('probability')" style="font-size:13px;color:var(--text-dim)">Probability</a>
+          <a href="#inferential" onclick="activateTopic('inferential')" style="font-size:13px;color:var(--text-dim)">Inferential</a>
           <a href="#challenge" style="font-size:13px;color:var(--text-dim)">Challenge Game</a>
           <a href="#lab" style="font-size:13px;color:var(--text-dim)">Statistics Lab</a>
           <a href="#about" style="font-size:13px;color:var(--text-dim)">About</a>
@@ -867,6 +869,22 @@ function showTopic(id){
   event.target.classList.add('active');
   if(id==='descriptive')buildStatsBars();
   if(id==='inferential')updateCI();
+}
+
+/* Called from nav/footer links — activates the tab without needing a click event */
+function activateTopic(id){
+  document.querySelectorAll('.topic-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const panel = document.getElementById('panel-'+id);
+  if(panel) panel.classList.add('active');
+  /* highlight matching tab button */
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.getAttribute('onclick') && b.getAttribute('onclick').includes("'"+id+"'")){
+      b.classList.add('active');
+    }
+  });
+  if(id==='descriptive') buildStatsBars();
+  if(id==='inferential') updateCI();
 }
 
 /* ===== DESCRIPTIVE BARS ===== */
