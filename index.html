@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Art of Statistics — Foundation for Data Science & ML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A;
+  --navy-mid: #152234;
+  --navy-soft: #1E3147;
+  --teal: #00C9B1;
+  --teal-dim: #00A090;
+  --teal-bg: rgba(0,201,177,0.08);
+  --amber: #F5A623;
+  --amber-bg: rgba(245,166,35,0.1);
+  --steel: #4A6FA5;
+  --steel-bg: rgba(74,111,165,0.12);
+  --crimson: #E84855;
+  --crimson-bg: rgba(232,72,85,0.1);
+  --green: #2ECC71;
+  --green-bg: rgba(46,204,113,0.1);
+  --paper: #F7F4EF;
+  --paper-dim: #EDE9E1;
+  --text-main: #F7F4EF;
+  --text-dim: #A8B8CC;
+  --text-muted: #607080;
+  --border: rgba(255,255,255,0.08);
+  --border-teal: rgba(0,201,177,0.3);
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --radius: 10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--navy);color:var(--text-main);line-height:1.6;overflow-x:hidden}
+a{color:var(--teal);text-decoration:none}
+::selection{background:var(--teal);color:var(--navy)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,27,42,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem}
+.nav-brand{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--teal);letter-spacing:0.05em;white-space:nowrap}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{font-size:13px;color:var(--text-dim);padding:6px 14px;border-radius:6px;transition:color 0.15s,background 0.15s;white-space:nowrap}
+.nav-links a:hover{color:var(--teal);background:var(--teal-bg)}
+
+/* HERO */
+.hero{padding:120px 2rem 80px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-eyebrow{font-family:var(--mono);font-size:12px;color:var(--teal);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.25rem}
+.hero h1{font-family:var(--mono);font-size:clamp(28px,4vw,48px);font-weight:600;line-height:1.15;margin-bottom:1rem;color:var(--paper)}
+.hero h1 span{color:var(--teal)}
+.hero-sub{font-size:16px;color:var(--text-dim);line-height:1.7;margin-bottom:2rem;max-width:480px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:10px 22px;border-radius:var(--radius);border:none;cursor:pointer;transition:all 0.15s;letter-spacing:0.01em}
+.btn-primary{background:var(--teal);color:var(--navy)}
+.btn-primary:hover{background:var(--teal-dim);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--teal);border:1px solid var(--border-teal)}
+.btn-ghost:hover{background:var(--teal-bg)}
+
+/* TERMINAL */
+.terminal{background:#0A1520;border:1px solid var(--border-teal);border-radius:12px;overflow:hidden;font-family:var(--mono)}
+.terminal-bar{background:#0F1F30;padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#E84855}.dot-y{background:#F5A623}.dot-g{background:#2ECC71}
+.terminal-title{font-size:11px;color:var(--text-muted);margin-left:4px;letter-spacing:0.05em}
+.terminal-body{padding:1.25rem;font-size:13px;line-height:1.8;min-height:260px}
+.t-comment{color:#607080}
+.t-key{color:#00C9B1}
+.t-val{color:#F5A623}
+.t-str{color:#2ECC71}
+.t-out{color:#F7F4EF}
+.t-err{color:#E84855}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--teal);animation:blink 1s step-end infinite;vertical-align:-2px;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* SECTION WRAPPER */
+.section{padding:80px 2rem;max-width:1100px;margin:0 auto}
+.section-full{padding:80px 2rem;background:var(--navy-mid)}
+.section-full .section{padding:0}
+.section-eyebrow{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-family:var(--mono);font-size:clamp(22px,3vw,32px);font-weight:600;color:var(--paper);margin-bottom:.75rem;line-height:1.2}
+.section-sub{font-size:15px;color:var(--text-dim);max-width:640px;line-height:1.7;margin-bottom:3rem}
+.divider{height:1px;background:var(--border);max-width:1100px;margin:0 auto}
+
+/* TOPIC TABS */
+.topic-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2.5rem}
+.tab-btn{font-family:var(--mono);font-size:12px;font-weight:500;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s;letter-spacing:0.04em}
+.tab-btn.active{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+.tab-btn:hover:not(.active){border-color:var(--teal);color:var(--teal)}
+.topic-panel{display:none}
+.topic-panel.active{display:block}
+
+/* CONTENT CARDS */
+.content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem}
+.card{background:var(--navy-soft);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color 0.2s}
+.card:hover{border-color:var(--border-teal)}
+.card-icon{font-size:24px;margin-bottom:.75rem}
+.card-label{font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:.4rem}
+.card-title{font-size:16px;font-weight:500;color:var(--paper);margin-bottom:.5rem}
+.card-body{font-size:14px;color:var(--text-dim);line-height:1.65}
+.card.teal{border-left:3px solid var(--teal)}
+.card.amber{border-left:3px solid var(--amber)}
+.card.crimson{border-left:3px solid var(--crimson)}
+.card.steel{border-left:3px solid var(--steel)}
+.card.green{border-left:3px solid var(--green)}
+
+/* FORMULA */
+.formula-box{background:#0A1520;border:1px solid var(--border-teal);border-radius:var(--radius);padding:1rem 1.25rem;font-family:var(--mono);font-size:14px;color:var(--teal);margin:1rem 0;line-height:1.9}
+.formula-box .label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:.35rem}
+
+/* PPDAC */
+.ppdac{display:flex;gap:0;margin:2rem 0;flex-wrap:wrap}
+.ppdac-step{flex:1;min-width:120px;background:var(--navy-soft);border:1px solid var(--border);padding:1.25rem 1rem;text-align:center;position:relative;transition:all 0.2s}
+.ppdac-step:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+.ppdac-step:last-child{border-radius:0 var(--radius) var(--radius) 0}
+.ppdac-step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--teal);font-size:18px;z-index:1}
+.ppdac-letter{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--teal)}
+.ppdac-word{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-top:.25rem}
+.ppdac-step.highlight{background:var(--teal-bg);border-color:var(--border-teal)}
+
+/* STATS VISUAL */
+.stats-bar-container{margin:1.5rem 0}
+.stats-bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+.stats-bar-label{font-family:var(--mono);font-size:12px;color:var(--text-dim);min-width:80px;text-align:right}
+.stats-bar-track{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.stats-bar-fill{height:100%;border-radius:4px;transition:width 0.8s ease}
+.stats-bar-val{font-family:var(--mono);font-size:12px;color:var(--text-dim);min-width:30px}
+
+/* CHALLENGE GAME */
+.game-area{background:var(--navy-soft);border:1px solid var(--border-teal);border-radius:16px;padding:2rem;max-width:760px;margin:0 auto}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.game-title{font-family:var(--mono);font-size:16px;color:var(--paper)}
+.game-meta{display:flex;gap:1.5rem;align-items:center}
+.game-score-label{font-size:12px;color:var(--text-muted);font-family:var(--mono)}
+.game-score{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--teal)}
+.game-progress-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin-bottom:2rem;overflow:hidden}
+.game-progress-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 0.4s ease}
+.game-topic-badge{font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-bg);border:1px solid rgba(245,166,35,0.25);padding:4px 12px;border-radius:20px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.25rem;display:inline-block}
+.game-question{font-size:16px;font-weight:500;color:var(--paper);line-height:1.6;margin-bottom:1.75rem}
+.game-options{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.option-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;text-align:left;font-size:14px;color:var(--text-dim);cursor:pointer;transition:all 0.15s;line-height:1.4}
+.option-btn:hover:not(:disabled){border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.option-btn.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.option-btn.wrong{border-color:var(--crimson);background:var(--crimson-bg);color:var(--crimson)}
+.option-btn:disabled{cursor:default}
+.game-explanation{background:#0A1520;border-left:3px solid var(--teal);border-radius:0 var(--radius) var(--radius) 0;padding:1rem 1.25rem;font-size:14px;color:var(--text-dim);line-height:1.6;margin-bottom:1.5rem;display:none}
+.game-explanation.show{display:block}
+.game-explanation strong{color:var(--teal)}
+.game-nav{display:flex;justify-content:space-between;align-items:center}
+.game-feedback{font-family:var(--mono);font-size:13px;color:var(--text-muted)}
+.game-feedback.correct{color:var(--green)}
+.game-feedback.wrong{color:var(--crimson)}
+.game-over{text-align:center;padding:2rem 0}
+.game-over .big-score{font-family:var(--mono);font-size:64px;font-weight:600;color:var(--teal);line-height:1}
+.game-over .score-label{font-size:14px;color:var(--text-dim);margin:.5rem 0 2rem}
+.game-over .grade{font-family:var(--mono);font-size:20px;margin-bottom:1.5rem}
+
+/* PROBABILITY DEMO */
+.prob-demo{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0}
+.prob-card{background:#0A1520;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.prob-label{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:.75rem}
+.prob-tree{font-family:var(--mono);font-size:13px;color:var(--text-dim);line-height:2}
+.prob-tree .branch{color:var(--teal)}
+.prob-tree .val{color:var(--amber)}
+
+/* COIN FLIP */
+.coin-section{background:var(--navy-soft);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1.5rem}
+.coin-container{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.coin{width:80px;height:80px;border-radius:50%;border:3px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;font-weight:600;color:var(--amber);cursor:pointer;transition:all 0.3s;flex-shrink:0}
+.coin:hover{background:var(--amber-bg);transform:scale(1.05)}
+.coin.flip{animation:flipCoin 0.5s ease}
+@keyframes flipCoin{0%{transform:scale(1)}25%{transform:scaleY(0.1)}50%{transform:scaleY(1)}75%{transform:scaleY(0.1)}100%{transform:scaleY(1)}}
+.coin-stats{flex:1;min-width:200px}
+.coin-stat-row{display:flex;justify-content:space-between;font-size:14px;padding:.3rem 0;border-bottom:1px solid var(--border)}
+.coin-stat-key{color:var(--text-dim);font-family:var(--mono);font-size:13px}
+.coin-stat-val{color:var(--teal);font-family:var(--mono);font-size:13px;font-weight:500}
+.history-dots{display:flex;flex-wrap:wrap;gap:4px;margin-top:1rem}
+.hdot{width:12px;height:12px;border-radius:50%;background:var(--text-muted)}
+.hdot.H{background:var(--teal)}
+.hdot.T{background:var(--amber)}
+
+/* INFERENTIAL */
+.ci-demo{background:var(--navy-soft);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1.5rem}
+.ci-visual{position:relative;height:60px;margin:1.5rem 0}
+.ci-track{position:absolute;top:50%;left:0;right:0;height:4px;background:rgba(255,255,255,0.08);transform:translateY(-50%)}
+.ci-bar{position:absolute;top:50%;height:4px;background:var(--steel);transform:translateY(-50%);border-radius:2px;transition:all 0.3s}
+.ci-point{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:var(--teal);transform:translate(-50%,-50%);transition:left 0.3s}
+.ci-label{position:absolute;top:0;font-family:var(--mono);font-size:10px;color:var(--text-muted);transform:translateX(-50%)}
+.ci-label.right{transform:translateX(-50%)}
+
+/* BAYES */
+.bayes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+.bayes-card{background:#0A1520;border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;text-align:center}
+.bayes-step{font-family:var(--mono);font-size:10px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:.4rem}
+.bayes-val{font-family:var(--mono);font-size:22px;font-weight:600}
+.bayes-desc{font-size:12px;color:var(--text-dim);margin-top:.4rem;line-height:1.4}
+.bayes-arrow{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--teal)}
+
+/* FOOTER */
+footer{background:#080F18;border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-brand{font-family:var(--mono);font-size:14px;color:var(--teal);margin-bottom:.5rem}
+.footer-text{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;gap:2.5rem;padding:100px 1.25rem 60px}
+  .game-options{grid-template-columns:1fr}
+  .prob-demo{grid-template-columns:1fr}
+  .bayes-grid{grid-template-columns:1fr}
+  .ppdac-step:not(:last-child)::after{display:none}
+  nav{padding:0 1rem}
+  .nav-links{gap:0}
+  .nav-links a{padding:6px 8px;font-size:12px}
+  .section{padding:60px 1.25rem}
+  .section-full{padding:60px 1.25rem}
+}
+@media(max-width:480px){
+  .hero-actions{flex-direction:column}
+  .nav-links li:nth-child(n+5){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">stat.foundation</span>
+    <ul class="nav-links">
+      <li><a href="#topics">Topics</a></li>
+      <li><a href="#ppdac">PPDAC</a></li>
+      <li><a href="#probability">Probability</a></li>
+      <li><a href="#inferential">Inferential</a></li>
+      <li><a href="#challenge">Challenge</a></li>
+      <li><a href="#lab">Lab</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="background:var(--navy)">
+  <div class="hero">
+    <div>
+      <p class="hero-eyebrow">Inspired by David Spiegelhalter · The Art of Statistics</p>
+      <h1>Statistics is the<br><span>foundation</span> of<br>all data science</h1>
+      <p class="hero-sub">Master the core ideas — descriptive, exploratory, inferential, and probabilistic thinking — before reaching for machine learning. Evidence first. Algorithms second.</p>
+      <div class="hero-actions">
+        <a href="#topics"><button class="btn btn-primary">Explore the topics</button></a>
+        <a href="#challenge"><button class="btn btn-ghost">Try the challenge →</button></a>
+      </div>
+    </div>
+    <div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="terminal-title">statistics_foundation.py</span>
+        </div>
+        <div class="terminal-body" id="terminal-output">
+          <span class="t-comment"># Loading statistical analysis...</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOPICS SECTION -->
+<div id="topics" class="section-full">
+<div class="section">
+  <p class="section-eyebrow">Core knowledge</p>
+  <h2 class="section-title">What is statistics, really?</h2>
+  <p class="section-sub">Statistics is the science of learning from data under uncertainty. Spiegelhalter calls it "the art of making sense of numbers." Click each topic to explore.</p>
+
+  <div class="topic-tabs" role="tablist">
+    <button class="tab-btn active" onclick="showTopic('definitions')" role="tab">Definitions</button>
+    <button class="tab-btn" onclick="showTopic('descriptive')" role="tab">Descriptive</button>
+    <button class="tab-btn" onclick="showTopic('exploratory')" role="tab">Exploratory</button>
+    <button class="tab-btn" onclick="showTopic('probability')" role="tab">Probability</button>
+    <button class="tab-btn" onclick="showTopic('inferential')" role="tab">Inferential</button>
+  </div>
+
+  <!-- DEFINITIONS -->
+  <div id="panel-definitions" class="topic-panel active">
+    <div class="content-grid">
+      <div class="card teal">
+        <div class="card-label">Core definition</div>
+        <div class="card-title">What is Statistics?</div>
+        <div class="card-body">The science of collecting, analysing, interpreting, presenting, and organising data. It is the primary tool for making informed decisions under uncertainty — the condition in which all real-world decisions are made.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">Population</div>
+        <div class="card-title">Population vs. Sample</div>
+        <div class="card-body"><strong style="color:var(--paper)">Population:</strong> every object about which information is sought. <strong style="color:var(--paper)">Sample:</strong> the subset actually observed. Most data science works with samples — never populations.</div>
+      </div>
+      <div class="card steel">
+        <div class="card-label">Spiegelhalter's insight</div>
+        <div class="card-title">Metaphorical Population</div>
+        <div class="card-body">Even when you appear to have all the data, treat it as a sample from an imaginary space of all possible outcomes that could have arisen. Every finding is an estimate — never a certainty.</div>
+      </div>
+      <div class="card crimson">
+        <div class="card-label">Key distinction</div>
+        <div class="card-title">Data ≠ Reality</div>
+        <div class="card-body">A dataset is only a representation of reality. What is missing? Motivation, stress, family circumstances, language — variables that matter but go unmeasured. Always ask: what is not in this data?</div>
+      </div>
+      <div class="card green">
+        <div class="card-label">Two branches</div>
+        <div class="card-title">Descriptive vs. Inferential</div>
+        <div class="card-body"><strong style="color:var(--paper)">Descriptive:</strong> summarise what you observe. <strong style="color:var(--paper)">Inferential:</strong> draw conclusions about what you did not observe. Both are necessary; neither is sufficient alone.</div>
+      </div>
+      <div class="card teal">
+        <div class="card-label">Core warning</div>
+        <div class="card-title">Correlation ≠ Causation</div>
+        <div class="card-body">Two variables can move together without one causing the other. Ice cream sales and drowning both rise in summer — because heat causes both. Always demand a logical mechanism before claiming causation.</div>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="label">The question before the data</div>
+      Problem → Plan → Data → Analysis → Conclusion<br>
+      <span style="color:var(--text-muted)">// This is PPDAC — Spiegelhalter's framework for every investigation</span>
+    </div>
+  </div>
+
+  <!-- DESCRIPTIVE -->
+  <div id="panel-descriptive" class="topic-panel">
+    <div class="content-grid">
+      <div class="card teal">
+        <div class="card-label">Central tendency</div>
+        <div class="card-title">The Mean (Average)</div>
+        <div class="card-body">The sum of all values divided by n. Sensitive to outliers — one extreme value distorts it. Always report the mean alongside a measure of spread.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">Robust centre</div>
+        <div class="card-title">The Median</div>
+        <div class="card-body">The middle value when data is ordered. Resistant to outliers. Preferred for income, house prices, and any skewed distribution where the mean would mislead.</div>
+      </div>
+      <div class="card steel">
+        <div class="card-label">Spread</div>
+        <div class="card-title">Variance & Standard Deviation</div>
+        <div class="card-body">Variance measures average squared distance from the mean. Standard deviation (σ) is its square root — the typical distance from the mean. Variability often matters more than the average.</div>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="label">Key formulas</div>
+      Mean:  x̄ = Σxᵢ / n<br>
+      Variance:  σ² = Σ(xᵢ − x̄)² / n<br>
+      Std Dev:  σ = √σ²<br>
+      <span style="color:var(--text-muted)">// Never report the mean without the standard deviation</span>
+    </div>
+    <div class="card" style="margin-top:1.5rem;background:var(--navy-soft)">
+      <div class="card-label">Live example — student exam scores</div>
+      <div class="stats-bar-container" id="stats-bars"></div>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-top:1rem" id="stats-summary"></div>
+    </div>
+  </div>
+
+  <!-- EXPLORATORY -->
+  <div id="panel-exploratory" class="topic-panel">
+    <div class="content-grid">
+      <div class="card teal">
+        <div class="card-label">EDA principle</div>
+        <div class="card-title">Visualise Before Modelling</div>
+        <div class="card-body">Always visualise the data before fitting a model. Charts reveal patterns, clusters, outliers, and errors that formulas cannot. A scatter plot takes 30 seconds; a wrong model takes weeks to diagnose.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">Distribution shape</div>
+        <div class="card-title">Normal vs. Skewed</div>
+        <div class="card-body"><strong style="color:var(--paper)">Normal (Gaussian):</strong> bell curve, mean = median = mode. <strong style="color:var(--paper)">Right-skewed:</strong> tail to the right, mean &gt; median. <strong style="color:var(--paper)">Left-skewed:</strong> tail to the left, mean &lt; median.</div>
+      </div>
+      <div class="card steel">
+        <div class="card-label">Relationship</div>
+        <div class="card-title">Pearson Correlation (r)</div>
+        <div class="card-body">r ranges from −1 to +1. r = +1: perfect positive linear relationship. r = 0: no linear relationship. r = −1: perfect negative. Reminder: r measures association, not causation.</div>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="label">Pearson's r</div>
+      r = Σ(xᵢ − x̄)(yᵢ − ȳ) / [√Σ(xᵢ − x̄)² · √Σ(yᵢ − ȳ)²]<br>
+      <span style="color:var(--text-muted)">// r close to 1.0 does not mean causation — especially with small samples</span>
+    </div>
+    <div style="margin-top:1.5rem">
+      <div class="card-label" style="margin-bottom:1rem;font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase">Distribution shapes</div>
+      <svg viewBox="0 0 660 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;font-family:IBM Plex Mono,monospace">
+        <text x="110" y="22" fill="#A8B8CC" font-size="11" text-anchor="middle">Normal Distribution</text>
+        <path d="M20,160 Q40,160 60,155 Q80,148 100,130 Q110,115 120,90 Q130,65 140,50 Q150,38 160,38 Q170,38 180,50 Q190,65 200,90 Q210,115 220,130 Q240,148 260,155 Q280,160 300,160" fill="none" stroke="#00C9B1" stroke-width="2.5"/>
+        <line x1="160" y1="38" x2="160" y2="160" stroke="#00C9B1" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <text x="160" y="175" fill="#607080" font-size="10" text-anchor="middle">mean=median=mode</text>
+        <text x="390" y="22" fill="#A8B8CC" font-size="11" text-anchor="middle">Right-Skewed</text>
+        <path d="M320,160 Q330,160 345,150 Q360,132 370,105 Q378,80 382,60 Q385,45 388,45 Q392,45 398,60 Q410,90 430,125 Q450,145 490,158 Q540,162 600,163" fill="none" stroke="#F5A623" stroke-width="2.5"/>
+        <line x1="388" y1="45" x2="388" y2="160" stroke="#4A6FA5" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="410" y1="125" x2="410" y2="160" stroke="#00C9B1" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="388" y="175" fill="#4A6FA5" font-size="9" text-anchor="middle">mode</text>
+        <text x="410" y="175" fill="#00C9B1" font-size="9" text-anchor="middle">median</text>
+        <text x="432" y="175" fill="#F5A623" font-size="9" text-anchor="middle">mean→</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- PROBABILITY -->
+  <div id="panel-probability" class="topic-panel" id="probability">
+    <div class="content-grid">
+      <div class="card teal">
+        <div class="card-label">Foundation</div>
+        <div class="card-title">Probability</div>
+        <div class="card-body">The language of uncertainty. P(A) = number of favourable outcomes / total possible outcomes. Ranges from 0 (impossible) to 1 (certain). Everything in data science uses probability at its core.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-label">Conditional</div>
+        <div class="card-title">P(A|B) — Conditional Probability</div>
+        <div class="card-body">The probability of A given B has occurred. P(A|B) = P(A ∩ B) / P(B). Knowing something changes the odds. Foundation of recommendation systems and fraud detection.</div>
+      </div>
+      <div class="card steel">
+        <div class="card-label">Bayesian</div>
+        <div class="card-title">Bayes' Theorem</div>
+        <div class="card-body">P(H|E) = P(E|H) · P(H) / P(E). Update your belief (prior) using evidence (likelihood) to get a revised belief (posterior). The core mechanism of rational learning.</div>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="label">Bayes' theorem — the three steps</div>
+      Prior P(H)  →  Likelihood P(E|H)  →  Posterior P(H|E)<br>
+      P(H|E) = P(E|H) × P(H) / P(E)<br>
+      <span style="color:var(--text-muted)">// Start with a belief. Collect evidence. Update. Repeat.</span>
+    </div>
+    <div class="bayes-grid">
+      <div class="bayes-card">
+        <div class="bayes-step">Step 1 — Prior</div>
+        <div class="bayes-val" style="color:var(--steel)">0.01</div>
+        <div class="bayes-desc">1% of emails are spam before seeing any content</div>
+      </div>
+      <div class="bayes-card">
+        <div class="bayes-step">Step 2 — Likelihood</div>
+        <div class="bayes-val" style="color:var(--amber)">P(E|H) = 0.80</div>
+        <div class="bayes-desc">"free" appears in 80% of spam emails</div>
+      </div>
+      <div class="bayes-card">
+        <div class="bayes-step">Step 3 — Posterior</div>
+        <div class="bayes-val" style="color:var(--teal)">≈ 0.45</div>
+        <div class="bayes-desc">After seeing "free", probability of spam rises to ~45%</div>
+      </div>
+    </div>
+
+    <div class="coin-section">
+      <div class="card-label" style="font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Interactive — coin flip simulator</div>
+      <div class="coin-container">
+        <div class="coin" id="coin" onclick="flipCoin()" title="Click to flip">H</div>
+        <div class="coin-stats">
+          <div class="coin-stat-row"><span class="coin-stat-key">Flips</span><span class="coin-stat-val" id="flip-count">0</span></div>
+          <div class="coin-stat-row"><span class="coin-stat-key">Heads</span><span class="coin-stat-val" id="flip-heads">0</span></div>
+          <div class="coin-stat-row"><span class="coin-stat-key">Tails</span><span class="coin-stat-val" id="flip-tails">0</span></div>
+          <div class="coin-stat-row"><span class="coin-stat-key">P(H) observed</span><span class="coin-stat-val" id="flip-prob">—</span></div>
+        </div>
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:.5rem">History</div>
+          <div class="history-dots" id="flip-history"></div>
+          <button onclick="resetCoin()" style="margin-top:.75rem;font-size:12px;padding:4px 12px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-dim);cursor:pointer">Reset</button>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:1rem">Watch how the observed probability converges to 0.5 as flips increase — the law of large numbers in action.</p>
+    </div>
+  </div>
+
+  <!-- INFERENTIAL -->
+  <div id="panel-inferential" class="topic-panel" id="inferential">
+    <div class="content-grid">
+      <div class="card teal">
+        <div class="card-label">Core concept</div>
+        <div class="card-title">Hypothesis Testing</div>
+        <div class="card-body">Start with a null hypothesis H₀ (nothing is happening). Collect data. Ask: how likely is this data if H₀ were true? If very unlikely, we reject H₀. The p-value quantifies this likelihood.</div>
+      </div>
+      <div class="card crimson">
+        <div class="card-label">Spiegelhalter's warning</div>
+        <div class="card-title">The p-value Problem</div>
+        <div class="card-body">p &lt; 0.05 does NOT mean the result is true. It means the data would be unlikely if H₀ were true. Many published significant results are false positives. Small samples amplify this problem enormously.</div>
+      </div>
+      <div class="card steel">
+        <div class="card-label">Precision</div>
+        <div class="card-title">Confidence Intervals</div>
+        <div class="card-body">A 95% CI means: if we repeated the study 100 times, roughly 95 of the intervals would contain the true population value. Not "95% probability the true value is in this interval."</div>
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="label">Confidence interval for a mean</div>
+      CI = x̄ ± z × (σ / √n)<br>
+      where z = 1.96 for 95% confidence, σ = population std dev, n = sample size<br>
+      <span style="color:var(--text-muted)">// Larger n → narrower interval → more precise estimate</span>
+    </div>
+    <div class="ci-demo">
+      <div class="card-label" style="font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Interactive — sample size and confidence interval</div>
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+        <label style="font-size:13px;color:var(--text-dim)">Sample size (n):</label>
+        <input type="range" min="5" max="200" value="30" id="ci-n" oninput="updateCI()" style="flex:1;min-width:120px">
+        <span style="font-family:var(--mono);font-size:14px;color:var(--teal);min-width:40px" id="ci-n-val">30</span>
+      </div>
+      <div class="ci-visual">
+        <div class="ci-track"></div>
+        <div class="ci-bar" id="ci-bar"></div>
+        <div class="ci-point" id="ci-point"></div>
+        <div class="ci-label" id="ci-lo" style="top:0"></div>
+        <div class="ci-label" id="ci-hi" style="top:0"></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-dim);margin-top:.5rem" id="ci-text"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PPDAC -->
+<div id="ppdac" style="padding:80px 2rem">
+<div style="max-width:1100px;margin:0 auto">
+  <p class="section-eyebrow">Spiegelhalter's framework</p>
+  <h2 class="section-title">The PPDAC Cycle</h2>
+  <p class="section-sub">Every rigorous statistical investigation follows five stages — in order. Skipping stages is how analysts reach wrong or misleading conclusions. Most students jump directly to Analysis.</p>
+
+  <div class="ppdac" id="ppdac-steps">
+    <div class="ppdac-step highlight" onclick="showPPDAC(0)">
+      <div class="ppdac-letter">P</div>
+      <div class="ppdac-word">Problem</div>
+    </div>
+    <div class="ppdac-step" onclick="showPPDAC(1)">
+      <div class="ppdac-letter">P</div>
+      <div class="ppdac-word">Plan</div>
+    </div>
+    <div class="ppdac-step" onclick="showPPDAC(2)">
+      <div class="ppdac-letter">D</div>
+      <div class="ppdac-word">Data</div>
+    </div>
+    <div class="ppdac-step" onclick="showPPDAC(3)">
+      <div class="ppdac-letter">A</div>
+      <div class="ppdac-word">Analysis</div>
+    </div>
+    <div class="ppdac-step" onclick="showPPDAC(4)">
+      <div class="ppdac-letter">C</div>
+      <div class="ppdac-word">Conclusion</div>
+    </div>
+  </div>
+
+  <div id="ppdac-detail" class="card" style="max-width:700px;background:var(--navy-soft);border-color:var(--border-teal)">
+    <div class="card-label" id="pd-label">Problem</div>
+    <div class="card-title" id="pd-title">State the question precisely</div>
+    <div class="card-body" id="pd-body">A vague question produces a useless answer. Before touching data, name: (1) the population of interest, (2) the outcome variable, (3) the candidate explanatory variables, (4) the decision the analysis should support. Vague: "predict marks." Precise: "which measurable factors among attendance, study hours, and assignment scores are most strongly associated with final exam performance for Level 1 students at this institution?"</div>
+  </div>
+
+  <div style="margin-top:2rem;padding:1rem 1.25rem;background:var(--crimson-bg);border:1px solid rgba(232,72,85,0.25);border-radius:var(--radius);max-width:700px">
+    <p style="font-size:14px;color:#F5A0A6;line-height:1.6"><strong style="color:var(--crimson)">The Shipman Warning:</strong> When the same statistical test was applied to all GPs, it surfaced a second outlier — with an entirely innocent explanation (elderly rural patients). Without domain context, statistical conclusions can be catastrophically wrong. The Problem stage must always come first.</p>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CHALLENGE GAME -->
+<div id="challenge" class="section-full">
+<div class="section">
+  <p class="section-eyebrow">Student challenge</p>
+  <h2 class="section-title">Test your statistical reasoning</h2>
+  <p class="section-sub">20 questions across five topics. No guessing — each answer includes the reasoning. Based directly on Spiegelhalter's Art of Statistics framework.</p>
+
+  <div class="game-area" id="game-area">
+    <div class="game-header">
+      <span class="game-title">Statistics Foundation Challenge</span>
+      <div class="game-meta">
+        <div>
+          <div class="game-score-label">SCORE</div>
+          <div class="game-score" id="g-score">0</div>
+        </div>
+        <div>
+          <div class="game-score-label">QUESTION</div>
+          <div class="game-score" id="g-qnum">1 / 20</div>
+        </div>
+      </div>
+    </div>
+    <div class="game-progress-bar"><div class="game-progress-fill" id="g-progress" style="width:5%"></div></div>
+    <div id="g-topic-badge" class="game-topic-badge">Definitions</div>
+    <div class="game-question" id="g-question">Loading question...</div>
+    <div class="game-options" id="g-options"></div>
+    <div class="game-explanation" id="g-explanation"></div>
+    <div class="game-nav">
+      <span class="game-feedback" id="g-feedback"></span>
+      <button class="btn btn-ghost" id="g-next" onclick="nextQuestion()" style="display:none">Next →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- STATISTICS LAB -->
+<style>
+/* LAB STYLES */
+.lab-problems{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:3rem}
+.lab-card{background:var(--navy-soft);border:1px solid var(--border);border-radius:14px;padding:1.5rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.lab-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.lab-card.water::before{background:var(--steel)}
+.lab-card.health::before{background:var(--crimson)}
+.lab-card.education::before{background:var(--teal)}
+.lab-card:hover{border-color:var(--border-teal);transform:translateY(-2px)}
+.lab-card.selected{border-color:var(--teal);background:rgba(0,201,177,0.05)}
+.lab-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:.75rem}
+.lab-tag.water{background:var(--steel-bg);color:var(--steel)}
+.lab-tag.health{background:var(--crimson-bg);color:var(--crimson)}
+.lab-tag.education{background:var(--teal-bg);color:var(--teal)}
+.lab-card-title{font-size:16px;font-weight:500;color:var(--paper);margin-bottom:.5rem}
+.lab-card-desc{font-size:13px;color:var(--text-dim);line-height:1.6}
+.lab-difficulty{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:.75rem}
+
+/* LAB WORKSPACE */
+.lab-workspace{display:none;background:var(--navy-soft);border:1px solid var(--border-teal);border-radius:16px;padding:2rem}
+.lab-workspace.open{display:block}
+.lab-ws-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.lab-ws-title{font-family:var(--mono);font-size:18px;color:var(--paper);margin-bottom:.3rem}
+.lab-ws-sub{font-size:13px;color:var(--text-dim);line-height:1.5}
+.lab-back-btn{font-size:13px;color:var(--text-dim);background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:6px 14px;cursor:pointer;white-space:nowrap}
+.lab-back-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* DATASET TABLE */
+.data-table-wrap{overflow-x:auto;margin:1.5rem 0;border:1px solid var(--border);border-radius:var(--radius)}
+.data-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+.data-table th{background:#0A1520;padding:.6rem .9rem;text-align:left;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--border);white-space:nowrap}
+.data-table td{padding:.55rem .9rem;border-bottom:1px solid var(--border);color:var(--text-dim)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(255,255,255,0.02);color:var(--paper)}
+.data-table td.num{color:var(--amber)}
+.data-table td.hi{color:var(--green)}
+.data-table td.lo{color:var(--crimson)}
+
+/* LAB STEPS */
+.lab-steps{display:flex;gap:0;margin:2rem 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.lab-step-btn{flex:1;padding:.6rem .5rem;background:transparent;border:none;border-right:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text-muted);cursor:pointer;transition:all 0.15s;text-align:center;letter-spacing:0.04em}
+.lab-step-btn:last-child{border-right:none}
+.lab-step-btn.active{background:var(--teal-bg);color:var(--teal)}
+.lab-step-btn.done{color:var(--green)}
+.lab-step-btn:hover:not(.active){background:rgba(255,255,255,0.03);color:var(--text-dim)}
+.lab-step-panel{display:none}
+.lab-step-panel.active{display:block}
+
+/* INPUT AREAS */
+.lab-input-group{margin:1rem 0}
+.lab-input-label{font-size:13px;color:var(--text-dim);margin-bottom:.4rem;display:block}
+.lab-input-label strong{color:var(--paper)}
+.lab-number-input{font-family:var(--mono);font-size:15px;background:#0A1520;border:1px solid var(--border);border-radius:var(--radius);color:var(--teal);padding:.5rem .85rem;width:140px;outline:none}
+.lab-number-input:focus{border-color:var(--teal)}
+.lab-text-input{font-family:var(--sans);font-size:13px;background:#0A1520;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-main);padding:.6rem .9rem;width:100%;outline:none;resize:vertical;min-height:70px;line-height:1.5}
+.lab-text-input:focus{border-color:var(--teal)}
+.lab-select{font-family:var(--mono);font-size:13px;background:#0A1520;border:1px solid var(--border);border-radius:var(--radius);color:var(--teal);padding:.5rem .85rem;outline:none;cursor:pointer}
+.lab-select:focus{border-color:var(--teal)}
+
+/* HINT BOX */
+.lab-hint{background:var(--amber-bg);border:1px solid rgba(245,166,35,0.2);border-radius:var(--radius);padding:.75rem 1rem;font-size:13px;color:#D4A030;line-height:1.6;margin:.75rem 0}
+.lab-hint strong{color:var(--amber)}
+
+/* WORKED STEP */
+.worked{background:#0A1520;border:1px solid var(--border-teal);border-radius:var(--radius);padding:1rem 1.25rem;margin:.75rem 0;font-family:var(--mono);font-size:13px;color:var(--text-dim);line-height:1.9}
+.worked .wl{display:block}.worked .wr{color:var(--teal)}
+.worked .wc{color:var(--text-muted)}
+
+/* CHECK BUTTON + RESULT */
+.check-btn{font-family:var(--mono);font-size:13px;font-weight:500;padding:9px 22px;background:var(--teal);color:var(--navy);border:none;border-radius:var(--radius);cursor:pointer;margin-top:1rem;transition:all 0.15s}
+.check-btn:hover{background:var(--teal-dim)}
+.check-btn:disabled{background:var(--navy-soft);color:var(--text-muted);cursor:default;border:1px solid var(--border)}
+.result-box{margin-top:1rem;padding:.85rem 1.1rem;border-radius:var(--radius);font-size:14px;line-height:1.6;display:none}
+.result-box.show{display:block}
+.result-box.correct{background:var(--green-bg);border:1px solid rgba(46,204,113,0.25);color:#6FEBA0}
+.result-box.wrong{background:var(--crimson-bg);border:1px solid rgba(232,72,85,0.25);color:#F07080}
+.result-box.info{background:var(--teal-bg);border:1px solid var(--border-teal);color:var(--text-dim)}
+
+/* PREDICTION PANEL */
+.prediction-panel{background:#0A1520;border:1px solid var(--border-teal);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.prediction-panel h4{font-family:var(--mono);font-size:13px;color:var(--teal);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem}
+.pred-inputs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.pred-output{background:var(--navy-soft);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
+.pred-val{font-family:var(--mono);font-size:36px;font-weight:600;color:var(--teal)}
+.pred-lbl{font-size:12px;color:var(--text-muted);margin-top:.25rem}
+.pred-ci{font-family:var(--mono);font-size:13px;color:var(--text-dim);margin-top:.4rem}
+
+/* EVIDENCE PANEL */
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.evidence-card{background:var(--navy-soft);border-radius:var(--radius);padding:1rem;border:1px solid var(--border)}
+.ev-label{font-size:11px;color:var(--text-muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:.4rem}
+.ev-val{font-family:var(--mono);font-size:18px;font-weight:500}
+.ev-note{font-size:12px;color:var(--text-dim);margin-top:.3rem;line-height:1.4}
+
+/* CONCLUSION CHECKLIST */
+.checklist{list-style:none;margin:1rem 0}
+.checklist li{display:flex;gap:.75rem;align-items:flex-start;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-dim);line-height:1.5}
+.checklist li:last-child{border-bottom:none}
+.check-icon{flex-shrink:0;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;margin-top:2px;cursor:pointer;transition:all 0.15s}
+.check-icon.ticked{background:var(--green);border-color:var(--green);color:var(--navy)}
+
+/* LAB SCORE */
+.lab-score-row{display:flex;align-items:center;justify-content:space-between;background:#0A1520;border-radius:var(--radius);padding:.75rem 1rem;margin-top:1.5rem}
+.lab-score-label{font-size:13px;color:var(--text-dim)}
+.lab-score-val{font-family:var(--mono);font-size:20px;color:var(--teal);font-weight:500}
+
+@media(max-width:640px){
+  .pred-inputs{grid-template-columns:1fr}
+  .evidence-grid{grid-template-columns:1fr}
+  .lab-steps{flex-wrap:wrap}
+  .lab-step-btn{min-width:80px}
+}
+</style>
+
+<div id="lab" style="padding:80px 2rem">
+<div style="max-width:1100px;margin:0 auto">
+  <p class="section-eyebrow">Statistics laboratory</p>
+  <h2 class="section-title">Solve a real problem — statistics only</h2>
+  <p class="section-sub">Choose a dataset with a real problem statement. Work through it step by step: explore, compute, model, predict, and make an evidence-based recommendation. No machine learning. Pure statistical reasoning.</p>
+
+  <!-- PROBLEM SELECTOR -->
+  <div class="lab-problems" id="lab-selector">
+    <div class="lab-card water" onclick="openLab('water')">
+      <span class="lab-tag water">Water & Sanitation</span>
+      <div class="lab-card-title">Service Delivery in Gauteng</div>
+      <div class="lab-card-desc">Analyse water access and sanitation scores across 8 municipalities. Identify which communities are most at risk and predict coverage from population density.</div>
+      <div class="lab-difficulty">Difficulty: ★★☆ · Steps: 5 · Dataset: n=8</div>
+    </div>
+    <div class="lab-card health" onclick="openLab('health')">
+      <span class="lab-tag health">Public Health</span>
+      <div class="lab-card-title">Clinic Wait Times vs. Patient Outcomes</div>
+      <div class="lab-card-desc">Use wait time and staffing data across 7 clinics to determine whether longer waits are associated with worse outcomes — and quantify the relationship.</div>
+      <div class="lab-difficulty">Difficulty: ★★★ · Steps: 5 · Dataset: n=7</div>
+    </div>
+    <div class="lab-card education" onclick="openLab('education')">
+      <span class="lab-tag education">Education</span>
+      <div class="lab-card-title">Student Success Prediction</div>
+      <div class="lab-card-desc">The case study from the slides. Six students, four variables. Work through every statistical step from mean to regression to ethical recommendation.</div>
+      <div class="lab-difficulty">Difficulty: ★☆☆ · Steps: 5 · Dataset: n=6</div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE -->
+  <div class="lab-workspace" id="lab-workspace"></div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">stat.foundation — the art of statistics</div>
+    <p class="footer-text">Built on David Spiegelhalter's <em>The Art of Statistics: How to Learn from Data</em> (2019).<br>Designed for Level 1 tertiary students in data science and applied mathematics.</p>
+  </div>
+</footer>
+
+<script>
+/* ===== TERMINAL ANIMATION ===== */
+const lines=[
+  {delay:200, html:'<span class="t-key">import</span> numpy <span class="t-key">as</span> np'},
+  {delay:400, html:'<span class="t-key">import</span> scipy.stats <span class="t-key">as</span> stats'},
+  {delay:700, html:''},
+  {delay:900, html:'<span class="t-comment"># Student exam scores (n=6)</span>'},
+  {delay:1100, html:'scores <span class="t-key">=</span> np.array([<span class="t-val">48</span>, <span class="t-val">60</span>, <span class="t-val">67</span>, <span class="t-val">74</span>, <span class="t-val">85</span>, <span class="t-val">92</span>])'},
+  {delay:1500, html:'<span class="t-comment"># Descriptive statistics</span>'},
+  {delay:1700, html:'mean  <span class="t-key">=</span> np.<span class="t-fn">mean</span>(scores)   <span class="t-comment"># → 71.0</span>'},
+  {delay:1900, html:'std   <span class="t-key">=</span> np.<span class="t-fn">std</span>(scores)    <span class="t-comment"># → 16.1</span>'},
+  {delay:2200, html:'r, p  <span class="t-key">=</span> stats.<span class="t-fn">pearsonr</span>(hours, scores)'},
+  {delay:2500, html:'<span class="t-out">>>> r = 0.998 · p = 0.00003</span>'},
+  {delay:2800, html:''},
+  {delay:3000, html:'<span class="t-comment"># Warning: n=6. Extreme r values can appear by chance.</span>'},
+  {delay:3400, html:'<span class="t-comment"># Always question the population this sample represents.</span>'},
+  {delay:3700, html:'<span class="t-comment"># PPDAC: Problem first, then data.</span>'},
+  {delay:4000, html:'<span class="t-str">print</span>(<span class="t-str">"Statistics is the foundation of all data science."</span>)'},
+  {delay:4400, html:'<span class="t-out">>> Statistics is the foundation of all data science.</span>'},
+];
+const tb=document.getElementById('terminal-output');
+let cursorEl=document.createElement('span');cursorEl.className='cursor';tb.appendChild(cursorEl);
+lines.forEach(l=>{
+  setTimeout(()=>{
+    const br=document.createElement('br');
+    const span=document.createElement('span');
+    span.innerHTML=l.html;
+    tb.insertBefore(br,cursorEl);
+    tb.insertBefore(span,cursorEl);
+  },l.delay);
+});
+
+/* ===== TOPIC TABS ===== */
+function showTopic(id){
+  document.querySelectorAll('.topic-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+  if(id==='descriptive')buildStatsBars();
+  if(id==='inferential')updateCI();
+}
+
+/* ===== DESCRIPTIVE BARS ===== */
+const students=['S1','S2','S3','S4','S5','S6'];
+const examScores=[48,60,67,74,85,92];
+const colors=['#E84855','#F5A623','#4A6FA5','#4A6FA5','#2ECC71','#2ECC71'];
+function buildStatsBars(){
+  const el=document.getElementById('stats-bars');
+  if(!el||el.children.length>0)return;
+  examScores.forEach((v,i)=>{
+    const row=document.createElement('div');row.className='stats-bar-row';
+    row.innerHTML=`<div class="stats-bar-label">${students[i]}</div><div class="stats-bar-track"><div class="stats-bar-fill" style="width:0%;background:${colors[i]}"></div></div><div class="stats-bar-val">${v}</div>`;
+    el.appendChild(row);
+    setTimeout(()=>row.querySelector('.stats-bar-fill').style.width=(v/100*100)+'%',100+i*120);
+  });
+  const mean=(examScores.reduce((a,b)=>a+b,0)/6).toFixed(1);
+  const variance=examScores.reduce((s,x)=>s+(x-mean)**2,0)/6;
+  const sd=Math.sqrt(variance).toFixed(1);
+  document.getElementById('stats-summary').innerHTML=`
+    <div><div style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">MEAN</div><div style="font-size:22px;font-weight:500;color:var(--teal);font-family:var(--mono)">${mean}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">STD DEV</div><div style="font-size:22px;font-weight:500;color:var(--amber);font-family:var(--mono)">${sd}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">RANGE</div><div style="font-size:22px;font-weight:500;color:var(--steel);font-family:var(--mono)">${92-48}</div></div>
+    <div><div style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">N</div><div style="font-size:22px;font-weight:500;color:var(--text-dim);font-family:var(--mono)">6</div></div>
+  `;
+}
+
+/* ===== PPDAC ===== */
+const ppdacData=[
+  {label:'Problem',title:'State the question precisely',body:'A vague question produces a useless answer. Before touching data, name: (1) the population of interest, (2) the outcome variable, (3) the candidate explanatory variables, (4) the decision the analysis should support. Vague: "predict marks." Precise: "which measurable factors among attendance, study hours, and assignment scores are most strongly associated with final exam performance for Level 1 students at this institution?"'},
+  {label:'Plan',title:'Decide what to measure and how',body:'Choose variables to collect, the sampling strategy, and how observations will be recorded. Sampling design matters enormously. A biased sample (e.g., only motivated volunteers) produces findings that cannot generalise to the population. The plan stage is where you ask: who is NOT in my sample, and why?'},
+  {label:'Data',title:'Collect, inspect, and understand limitations',body:'Collect the data, then immediately inspect it before analysing. What is missing? Were there measurement errors? Are there impossible values? What is not in the data that might matter — motivation, stress, socioeconomic background? Understanding your data\'s limitations is not a step you skip; it is a prerequisite for honest analysis.'},
+  {label:'Analysis',title:'Apply statistical methods with uncertainty',body:'Summarise, visualise, model — and always quantify uncertainty. Report confidence intervals alongside estimates. Note when sample sizes are too small to support strong conclusions. Apply PPDAC: the Analysis must answer the Problem, not a different question you decided to ask after seeing the data (HARKing — Hypothesising After Results are Known).'},
+  {label:'Conclusion',title:'Return to the problem with honest limits',body:'Translate your findings into an answer to the original Problem. State clearly what the data supports and what it does not. Distinguish "associated with" from "causes." Name the population the findings apply to, and where they may not generalise. A conclusion that overstates its evidence is a failure of statistical ethics.'},
+];
+function showPPDAC(i){
+  document.querySelectorAll('.ppdac-step').forEach((s,j)=>{s.classList.toggle('highlight',j===i)});
+  document.getElementById('pd-label').textContent=ppdacData[i].label;
+  document.getElementById('pd-title').textContent=ppdacData[i].title;
+  document.getElementById('pd-body').textContent=ppdacData[i].body;
+}
+
+/* ===== COIN FLIP ===== */
+let flipCount=0,heads=0,tails=0,history=[];
+function flipCoin(){
+  const coin=document.getElementById('coin');
+  coin.classList.remove('flip');
+  void coin.offsetWidth;
+  coin.classList.add('flip');
+  const isH=Math.random()<0.5;
+  flipCount++;
+  if(isH)heads++;else tails++;
+  history.push(isH?'H':'T');
+  coin.textContent=isH?'H':'T';
+  coin.style.color=isH?'var(--teal)':'var(--amber)';
+  coin.style.borderColor=isH?'var(--teal)':'var(--amber)';
+  document.getElementById('flip-count').textContent=flipCount;
+  document.getElementById('flip-heads').textContent=heads;
+  document.getElementById('flip-tails').textContent=tails;
+  document.getElementById('flip-prob').textContent=(heads/flipCount).toFixed(3);
+  const hd=document.getElementById('flip-history');
+  const dot=document.createElement('div');
+  dot.className='hdot '+(isH?'H':'T');
+  hd.appendChild(dot);
+  if(hd.children.length>60)hd.removeChild(hd.firstChild);
+}
+function resetCoin(){
+  flipCount=heads=tails=0;history=[];
+  document.getElementById('flip-count').textContent='0';
+  document.getElementById('flip-heads').textContent='0';
+  document.getElementById('flip-tails').textContent='0';
+  document.getElementById('flip-prob').textContent='—';
+  document.getElementById('flip-history').innerHTML='';
+  const c=document.getElementById('coin');c.textContent='H';c.style.color='var(--amber)';c.style.borderColor='var(--amber)';
+}
+
+/* ===== CONFIDENCE INTERVAL ===== */
+function updateCI(){
+  const n=+document.getElementById('ci-n').value;
+  document.getElementById('ci-n-val').textContent=n;
+  const sigma=15,mean=71;
+  const z=1.96;
+  const se=sigma/Math.sqrt(n);
+  const margin=z*se;
+  const lo=(mean-margin).toFixed(1);
+  const hi=(mean+margin).toFixed(1);
+  const trackWidth=100;
+  const range=60;
+  const loP=((mean-margin-(mean-range/2))/range*100).toFixed(1);
+  const hiP=((mean+margin-(mean-range/2))/range*100).toFixed(1);
+  const midP=((mean-(mean-range/2))/range*100).toFixed(1);
+  const bar=document.getElementById('ci-bar');
+  const pt=document.getElementById('ci-point');
+  const lbl_lo=document.getElementById('ci-lo');
+  const lbl_hi=document.getElementById('ci-hi');
+  bar.style.left=Math.max(0,Math.min(100,loP))+'%';
+  bar.style.width=Math.max(0,Math.min(100,hiP-loP))+'%';
+  pt.style.left=midP+'%';
+  lbl_lo.style.left=Math.max(2,Math.min(95,loP))+'%';
+  lbl_lo.textContent=lo;
+  lbl_hi.style.left=Math.max(2,Math.min(97,hiP))+'%';
+  lbl_hi.textContent=hi;
+  document.getElementById('ci-text').innerHTML=`95% CI: [<span style="color:var(--teal)">${lo}</span>, <span style="color:var(--teal)">${hi}</span>] &nbsp;·&nbsp; Margin of error: ±<span style="color:var(--amber)">${margin.toFixed(1)}</span> &nbsp;·&nbsp; <span style="color:var(--text-muted)">Wider n = smaller interval</span>`;
+}
+updateCI();
+
+/* ===== CHALLENGE GAME ===== */
+const QUESTIONS=[
+  {topic:'Definitions',q:'What is the primary purpose of statistics according to Spiegelhalter?',opts:['To prove hypotheses correct','To learn from data under uncertainty','To find patterns in large datasets','To replace human judgment'],ans:1,exp:'Spiegelhalter defines statistics as the science of learning from data under uncertainty. The key word is <strong>uncertainty</strong> — all real-world decisions are made without complete information.'},
+  {topic:'Definitions',q:'What does it mean when Spiegelhalter says "data ≠ reality"?',opts:['Data is always wrong','Datasets are incomplete representations of a complex reality','We should not use data for decisions','Data only matters in large quantities'],ans:1,exp:'Data captures what was measured — not everything that matters. Motivation, stress, family circumstances, and countless other factors affect outcomes but may not appear in a dataset. Always ask: what is missing?'},
+  {topic:'Definitions',q:'What is the difference between a population and a sample?',opts:['Population is larger than a sample','Population is everything we want to understand; sample is what we observe','Sample is more accurate than population data','Population is only used in government statistics'],ans:1,exp:'<strong>Population</strong>: the complete set of objects about which information is sought. <strong>Sample</strong>: the subset actually collected and observed. Most data science works with samples and draws inferences about populations.'},
+  {topic:'Definitions',q:'Spiegelhalter\'s "metaphorical population" means:',opts:['The imaginary space of all possible outcomes that could have arisen','The total world population of people','A population that is too large to measure','The population we wish we had sampled'],ans:0,exp:'Even when you seem to have all the data, Spiegelhalter argues you should treat it as a sample from the imaginary space of all possible observations. This means every finding remains an estimate, never a certainty.'},
+  {topic:'Descriptive',q:'You have exam scores: 4, 5, 6, 8, 10, 11, 12, 50. Which measure of centre is most appropriate?',opts:['Mean, because it uses all values','Median, because of the outlier (50)','Mode, because it appears most often','Range, because it captures extremes'],ans:1,exp:'The outlier (50) distorts the mean significantly. The <strong>median</strong> — the middle value — is resistant to outliers and gives a better picture of the typical student\'s score. This is why Spiegelhalter says "never report the mean without the standard deviation."'},
+  {topic:'Descriptive',q:'What does a large standard deviation tell you about a dataset?',opts:['The mean is incorrect','The data is normally distributed','Values are spread far from the mean','There are many outliers'],ans:2,exp:'Standard deviation (σ) measures the typical distance from the mean. A large σ means values are widely spread — students differ significantly from each other. A small σ means values cluster tightly around the mean.'},
+  {topic:'Descriptive',q:'Class A scores: 8, 9, 10, 10, 11. Class B scores: 1, 5, 10, 15, 19. What is true?',opts:['Class A performed better overall','Both classes have similar means, but very different spread','Class B is more consistent','The median is a better measure here'],ans:1,exp:'Both classes have a mean of approximately 9.6, but Class A has very low standard deviation (consistent) while Class B has very high standard deviation (highly variable). <strong>Variability matters as much as the average.</strong>'},
+  {topic:'Descriptive',q:'The formula σ² = Σ(xᵢ − x̄)² / n calculates:',opts:['Standard deviation','Variance','The mean squared','Pearson\'s r'],ans:1,exp:'This is the formula for <strong>variance</strong> (σ²). It measures the average squared distance of each observation from the mean. The standard deviation is simply √σ² — making it easier to interpret in the original units.'},
+  {topic:'Exploratory',q:'Why should you visualise data before modelling?',opts:['To make reports look professional','Charts reveal patterns, clusters, and outliers that formulas cannot','Visualisation is required by law','To choose the right algorithm'],ans:1,exp:'Spiegelhalter emphasises: visualise before modelling. A scatter plot can immediately reveal a non-linear relationship, a cluster of outliers, or a data entry error — all of which would cause a statistical model to give misleading results.'},
+  {topic:'Exploratory',q:'In a right-skewed distribution (positive skew), which is true?',opts:['Mean = Median = Mode','Mean > Median > Mode','Mean < Median < Mode','All three measures are meaningless'],ans:1,exp:'In a right-skewed distribution, the long tail pulls the mean to the right. So <strong>Mean > Median > Mode</strong>. This is typical for income distributions, house prices, and other financial data where a few very high values inflate the mean.'},
+  {topic:'Exploratory',q:'Pearson\'s r = 0.998 between study hours and exam scores (n=6). What should you conclude?',opts:['Study hours definitively cause higher scores','This proves a perfect linear relationship in the population','Be cautious — with n=6, extreme r values can appear by chance','The relationship is exactly 99.8% certain'],ans:2,exp:'With only 6 data points, extreme correlation values are unreliable. A near-perfect r can appear by chance in small samples even when no real population-level relationship exists. <strong>Always consider sample size when interpreting correlations.</strong>'},
+  {topic:'Exploratory',q:'What does "correlation ≠ causation" mean in practice?',opts:['Correlation is less useful than causation','Two variables can move together without one causing the other','You need experiments to find any pattern','Statistical software cannot measure causation'],ans:1,exp:'Ice cream sales and drowning deaths both rise in summer — they are correlated, but ice cream does not cause drowning. Heat causes both. <strong>Always demand a logical mechanism</strong> before claiming that one variable causes another.'},
+  {topic:'Probability',q:'If P(A) = 0.3 and P(B) = 0.5, and A and B are independent, what is P(A and B)?',opts:['0.8','0.15','0.2','0.65'],ans:1,exp:'For independent events, P(A ∩ B) = P(A) × P(B) = 0.3 × 0.5 = <strong>0.15</strong>. Independence means knowing A occurred tells you nothing about B occurring — they do not influence each other.'},
+  {topic:'Probability',q:'What is Bayesian thinking, in simple terms?',opts:['Testing whether a hypothesis is true or false','Starting with a belief, collecting evidence, then updating the belief','Calculating probabilities from large datasets','Finding the most likely explanation for observed data'],ans:1,exp:'Bayesian thinking is: <strong>Prior</strong> (your initial belief) + <strong>Likelihood</strong> (how probable is this evidence given the belief?) → <strong>Posterior</strong> (your updated belief). Spam filters, medical diagnosis, and fraud detection all use this cycle.'},
+  {topic:'Probability',q:'P(A|B) means:',opts:['The probability of both A and B','The probability of A given that B has already occurred','The probability of A or B','The probability that A causes B'],ans:1,exp:'<strong>Conditional probability P(A|B)</strong> is the probability of A given that B has occurred. Knowing B changes the probability of A. Formula: P(A|B) = P(A ∩ B) / P(B). This is the foundation of recommendation systems and medical testing.'},
+  {topic:'Probability',q:'In a fair coin flip experiment with 10 flips, you get 8 heads. What should you conclude?',opts:['The coin is biased','This is unlikely but possible by chance — 10 flips is too few to conclude bias','The probability of heads is now 0.8','You need to flip it 100 more times to get useful data'],ans:1,exp:'With only 10 flips, unusual sequences are common even with a fair coin. The probability of 8+ heads with a fair coin is about 5.5% — possible but not conclusive. Small samples produce unreliable estimates. This is the law of large numbers in action.'},
+  {topic:'Inferential',q:'A p-value of 0.03 means:',opts:['There is a 3% probability the null hypothesis is true','If the null hypothesis were true, this data has a 3% probability of occurring','The finding is definitely true','There is a 97% chance the alternative hypothesis is correct'],ans:1,exp:'The p-value is NOT the probability that H₀ is true. It is the probability of observing data this extreme (or more extreme) <strong>if H₀ were true</strong>. Spiegelhalter warns: many studies claiming significance are misleading. Small samples amplify false positives.'},
+  {topic:'Inferential',q:'What does a wider confidence interval indicate?',opts:['A more reliable estimate','Greater uncertainty — often due to a smaller sample size','An error in the data','The estimate is outside the plausible range'],ans:1,exp:'A wider CI indicates more uncertainty. As sample size (n) increases, the interval narrows because SE = σ/√n decreases. With n=5, you have far less precision than with n=500. <strong>Larger n → narrower interval → more precise estimate.</strong>'},
+  {topic:'Inferential',q:'What is HARKing and why is it a problem?',opts:['A type of data collection error','Hypothesising After Results are Known — inflating apparent significance','A sampling bias in inferential statistics','An error in confidence interval calculation'],ans:1,exp:'<strong>HARKing</strong> (Hypothesising After Results are Known) is when an analyst defines their hypothesis after seeing the data. This makes almost any result appear statistically significant. It is a major cause of irreproducible findings. The Problem stage of PPDAC must come before Analysis.'},
+  {topic:'Definitions',q:'We label Student 1 "high risk" based on 6 peers. What is our ethical obligation?',opts:['Share the prediction immediately with all staff','Report uncertainty, state data limitations, and consider consequences for false positives','Keep the result confidential forever','Run the analysis again with a different method'],ans:1,exp:'Spiegelhalter places four obligations on analysts: (1) report uncertainty alongside estimates, (2) state what the data cannot support, (3) consider who is harmed by errors (false positives stigmatise; false negatives leave students without help), (4) ensure decision-makers understand the limits. <strong>Statistics without ethics is dangerous.</strong>'},
+];
+
+let currentQ=0,score=0,answered=false;
+
+function loadQuestion(){
+  const q=QUESTIONS[currentQ];
+  document.getElementById('g-topic-badge').textContent=q.topic;
+  document.getElementById('g-question').textContent=q.q;
+  document.getElementById('g-qnum').textContent=(currentQ+1)+' / '+QUESTIONS.length;
+  document.getElementById('g-progress').style.width=((currentQ+1)/QUESTIONS.length*100)+'%';
+  document.getElementById('g-feedback').textContent='';
+  document.getElementById('g-feedback').className='game-feedback';
+  document.getElementById('g-next').style.display='none';
+  document.getElementById('g-explanation').classList.remove('show');
+  document.getElementById('g-explanation').innerHTML='';
+  answered=false;
+  const opts=document.getElementById('g-options');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn';
+    btn.textContent=o;
+    btn.onclick=()=>answerQ(i);
+    opts.appendChild(btn);
+  });
+}
+
+function answerQ(i){
+  if(answered)return;
+  answered=true;
+  const q=QUESTIONS[currentQ];
+  const btns=document.querySelectorAll('.option-btn');
+  btns.forEach(b=>b.disabled=true);
+  const correct=i===q.ans;
+  btns[i].className='option-btn '+(correct?'correct':'wrong');
+  if(!correct)btns[q.ans].className='option-btn correct';
+  if(correct){score++;document.getElementById('g-score').textContent=score;}
+  const fb=document.getElementById('g-feedback');
+  fb.textContent=correct?'Correct! +1':'Incorrect';
+  fb.className='game-feedback '+(correct?'correct':'wrong');
+  const exp=document.getElementById('g-explanation');
+  exp.innerHTML=q.exp;
+  exp.classList.add('show');
+  document.getElementById('g-next').style.display='block';
+}
+
+function nextQuestion(){
+  currentQ++;
+  if(currentQ>=QUESTIONS.length){showGameOver();return;}
+  loadQuestion();
+}
+
+function showGameOver(){
+  const pct=Math.round(score/QUESTIONS.length*100);
+  const grade=pct>=90?'Distinction 🎓':pct>=75?'Merit ✓':pct>=60?'Pass':'Keep studying 📖';
+  const gradeColor=pct>=90?'var(--green)':pct>=75?'var(--teal)':pct>=60?'var(--amber)':'var(--crimson)';
+  document.getElementById('game-area').innerHTML=`
+    <div class="game-over">
+      <div class="big-score">${score}/${QUESTIONS.length}</div>
+      <div class="score-label">final score &nbsp;·&nbsp; ${pct}% correct</div>
+      <div class="game-grade" style="font-family:var(--mono);font-size:20px;margin-bottom:1.5rem;color:${gradeColor}">${grade}</div>
+      <p style="font-size:14px;color:var(--text-dim);max-width:460px;margin:0 auto 2rem;line-height:1.7">
+        ${pct>=75?'Strong statistical reasoning. You understand that data is not reality, that samples have limits, and that uncertainty must always be reported.':'Review the PPDAC cycle, correlation vs. causation, and the p-value warning. Spiegelhalter\'s core message: the question comes before the data, and uncertainty is not optional.'}
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="restartGame()">Play again</button>
+        <a href="#topics"><button class="btn btn-ghost">Review topics</button></a>
+      </div>
+    </div>`;
+}
+
+function restartGame(){
+  currentQ=0;score=0;answered=false;
+  document.getElementById('game-area').innerHTML=`
+    <div class="game-header">
+      <span class="game-title">Statistics Foundation Challenge</span>
+      <div class="game-meta">
+        <div><div class="game-score-label">SCORE</div><div class="game-score" id="g-score">0</div></div>
+        <div><div class="game-score-label">QUESTION</div><div class="game-score" id="g-qnum">1 / 20</div></div>
+      </div>
+    </div>
+    <div class="game-progress-bar"><div class="game-progress-fill" id="g-progress" style="width:5%"></div></div>
+    <div id="g-topic-badge" class="game-topic-badge">Definitions</div>
+    <div class="game-question" id="g-question"></div>
+    <div class="game-options" id="g-options"></div>
+    <div class="game-explanation" id="g-explanation"></div>
+    <div class="game-nav">
+      <span class="game-feedback" id="g-feedback"></span>
+      <button class="btn btn-ghost" id="g-next" onclick="nextQuestion()" style="display:none">Next →</button>
+    </div>`;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
